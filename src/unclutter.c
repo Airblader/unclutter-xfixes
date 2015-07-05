@@ -89,7 +89,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [-t <n>] [-b] [-v] [-h] [-d]", argv[0]);
+    fprintf(stderr, "Usage: %s [-t <n>] [-b] [-v] [-h]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }

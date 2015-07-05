@@ -8,12 +8,27 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [-t <n>] [-b] [-h] [-v] [-d]
+unclutter [-t <n>] [-b] [-h] [-v]
 
 == OPTIONS
 
-TODO.
+-t <n>::
+Specifies the number of seconds after which the cursor should be hidden if
+it was neither moved nor any button was pressed.
+
+-b::
+Fork unclutter to the background.
+
+-h::
+Display the usage and exit.
+
+-v::
+Display the version and exit.
 
 == DESCRIPTION
 
-TODO.
+Hide the mouse cursor if it isn't being used.
+
+This version of unclutter is a rewrite of the original and uses the x11-xfixes
+extension, which means that no fake windows or pointer grabbing is needed. This
+should work better with window managers and applications.
