@@ -1,6 +1,6 @@
-[![Issues](https://img.shields.io/github/issues/Airblader/xedgewarp.svg)](https://github.com/Airblader/unclutter-xfixes/issues)
-[![Forks](https://img.shields.io/github/forks/Airblader/xedgewarp.svg)](https://github.com/Airblader/unclutter-xfixes/network)
-[![Stars](https://img.shields.io/github/stars/Airblader/xedgewarp.svg)](https://github.com/Airblader/unclutter-xfixes/stargazers)
+[![Issues](https://img.shields.io/github/issues/Airblader/unclutter-xfixes.svg)](https://github.com/Airblader/unclutter-xfixes/issues)
+[![Forks](https://img.shields.io/github/forks/Airblader/unclutter-xfixes.svg)](https://github.com/Airblader/unclutter-xfixes/network)
+[![Stars](https://img.shields.io/github/stars/Airblader/unclutter-xfixes.svg)](https://github.com/Airblader/unclutter-xfixes/stargazers)
 
 # unclutter-xfixes
 
