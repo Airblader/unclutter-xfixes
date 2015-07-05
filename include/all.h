@@ -4,6 +4,7 @@
 #include "externals.h"
 
 #include "extensions.h"
+#include "event.h"
 #include "globals.h"
 #include "types.h"
 #include "util.h"

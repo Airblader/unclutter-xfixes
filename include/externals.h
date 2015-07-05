@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <err.h>
+#include <ev.h>
 
 #include <X11/Xlib.h>
 #include <X11/extensions/XInput2.h>

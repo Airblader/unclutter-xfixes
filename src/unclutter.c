@@ -41,12 +41,14 @@ static void run(void) {
         bail("Failed to connect to the X server.");
 
     extensions_init();
-    // TODO
+    event_init();
 
     exit(EXIT_SUCCESS);
 }
 
 static void on_exit_hook(void) {
+    // TODO enforce showing cursor here
+
     if (display != NULL)
         XCloseDisplay(display);
 }

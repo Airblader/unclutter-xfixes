@@ -13,6 +13,8 @@ CFLAGS += -I$(IDIR)
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wundef -Wshadow
 LIBS = $(shell pkg-config --libs x11 xi xfixes)
+# libev has no pkg-config support
+LIBS += -lev
 
 INCS = $(wildcard $(IDIR)/*.h)
 SRCS = $(wildcard $(SDIR)/*.c)
