@@ -7,6 +7,5 @@
 extern Display *display;
 
 extern int xi_ext_opcode;
-extern int xfixes_ext_opcode;
 
 extern Config config;

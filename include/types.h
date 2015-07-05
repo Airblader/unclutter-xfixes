@@ -2,4 +2,6 @@
 #pragma once
 
 typedef struct Config {
+    bool fork;
+    bool debug;
 } Config;
