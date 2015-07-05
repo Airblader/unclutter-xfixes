@@ -3,6 +3,7 @@
 
 #include "externals.h"
 
+#include "cursor.h"
 #include "extensions.h"
 #include "event.h"
 #include "globals.h"
