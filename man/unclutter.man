@@ -8,7 +8,7 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [-b] [-h] [-v] [-d]
+unclutter [-t <n>] [-b] [-h] [-v] [-d]
 
 == OPTIONS
 

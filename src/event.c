@@ -32,8 +32,7 @@ static void event_init_x_loop(void) {
 }
 
 static void event_init_timer(void) {
-    // TODO make 1s configurable
-    ev_timer_init(&idle_watcher, idle_cb, 0, 1);
+    ev_timer_init(&idle_watcher, idle_cb, 0, config.timeout);
     ev_timer_start(loop, &idle_watcher);
 }
 

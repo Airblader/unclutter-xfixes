@@ -2,6 +2,7 @@
 #pragma once
 
 typedef struct Config {
+    long timeout;
     bool fork;
     bool debug;
 } Config;

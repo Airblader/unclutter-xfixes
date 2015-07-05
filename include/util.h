@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
 #define FREE(p)          \
     do {                 \
@@ -24,3 +25,5 @@
     } while (0)
 
 void bail(char *message);
+
+long int parse_int(char *str);

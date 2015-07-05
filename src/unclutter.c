@@ -21,6 +21,7 @@ static void safe_fork(callback child_callback);
 Display *display;
 
 Config config = {
+    .timeout = 5,
     .fork = false,
     .debug = false
 };
@@ -56,8 +57,18 @@ static void on_exit_hook(void) {
 
 static void parse_args(int argc, char *argv[]) {
     int c;
-    while ((c = getopt(argc, argv, "bvhd")) != -1) {
+    while ((c = getopt(argc, argv, "t:bvhd")) != -1) {
+        long value;
+
         switch (c) {
+            case 't':
+                value = parse_int(optarg);
+                if (value < 0)
+                    ELOG("Invalid timeout specified.");
+                else
+                    config.timeout = value;
+
+                break;
             case 'b':
                 config.fork = true;
                 break;
@@ -78,7 +89,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [-b] [-v] [-h] [-d]", argv[0]);
+    fprintf(stderr, "Usage: %s [-t <n>] [-b] [-v] [-h] [-d]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
