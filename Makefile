@@ -20,7 +20,7 @@ INCS = $(wildcard $(IDIR)/*.h)
 SRCS = $(wildcard $(SDIR)/*.c)
 OBJS = $(patsubst %,$(ODIR)/%,$(notdir $(SRCS:.c=.o)))
 
-MANS = man/unclutter.1
+MANS = man/unclutter-xfixes.1
 
 .NOTPARALLEL:
 
@@ -37,7 +37,7 @@ $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
 .PHONY: install
 install: $(TARGET)
 	$(INSTALL) -Dm 0755 $(TARGET) $(DESTDIR)$(PREFIX)/$(TARGET)
-	$(INSTALL) -Dm 0644 man/unclutter.1 $(DESTDIR)$(MANDIR)/unclutter.1
+	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 $(DESTDIR)$(MANDIR)/unclutter.1
 
 .PHONY: uninstall
 uninstall:

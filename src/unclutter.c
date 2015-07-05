@@ -73,7 +73,7 @@ static void parse_args(int argc, char *argv[]) {
                 config.fork = true;
                 break;
             case 'v':
-                fprintf(stderr, "%s version %s\n", argv[0], __VERSION);
+                fprintf(stderr, "unclutter-xfixes version %s\n", __VERSION);
                 exit(EXIT_SUCCESS);
                 break;
             case 'd':
