@@ -9,6 +9,7 @@ void cursor_show(void) {
 
     DLOG("Showing the cursor.");
     XFixesShowCursor(display, DefaultRootWindow(display));
+    XFlush(display);
     hidden = false;
 }
 
@@ -18,5 +19,6 @@ void cursor_hide(void) {
 
     DLOG("Hiding the cursor.");
     XFixesHideCursor(display, DefaultRootWindow(display));
+    XFlush(display);
     hidden = true;
 }
