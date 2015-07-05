@@ -36,6 +36,11 @@ int main(int argc, char *argv[]) {
 }
 
 static void run(void) {
+    display = XOpenDisplay(NULL);
+    if (display == NULL)
+        bail("Failed to connect to the X server.");
+
+    extensions_init();
     // TODO
 
     exit(EXIT_SUCCESS);
