@@ -46,9 +46,12 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
     while (XPending(display) > 0) {
         XNextEvent(display, &ev);
 
-        // TODO only do this if the event is correct
-        cursor_show();
-        ev_timer_again(loop, &idle_watcher);
+        XGenericEventCookie *cookie = &ev.xcookie;
+        if (XGetEventData(display, cookie) && cookie->type == GenericEvent && cookie->extension == xi_ext_opcode) {
+            /* We don't bother checking the exact event since we only select events that interest us. */
+            cursor_show();
+            ev_timer_again(loop, &idle_watcher);
+        }
     }
 }
 
