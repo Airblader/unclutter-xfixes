@@ -27,16 +27,19 @@ static void event_init_x_loop(void) {
 
 static void event_init_timer(void) {
     // TODO make 1s configurable
-    ev_timer_init(&idle_watcher, idle_cb, 1, 0.);
+    ev_timer_init(&idle_watcher, idle_cb, 0, 1);
     ev_timer_start(loop, &idle_watcher);
 }
 
 static void x_cb(EV_P_ ev_io *w, int revents) {
-    // TODO
+    // TODO show mouse if it was moved
     DLOG("called x_cb");
+
+    // TODO only call this when the mouse has moved
+    ev_timer_again(loop, &idle_watcher);
 }
 
 static void idle_cb(EV_P_ ev_timer *w, int revents) {
-    // TODO
+    // TODO hide mouse if this was called
     DLOG("called idle_cb");
 }
