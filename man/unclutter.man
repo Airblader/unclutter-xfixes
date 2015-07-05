@@ -1,0 +1,19 @@
+unclutter-xfixes(1)
+===================
+Ingo Bürk <ingo.buerk@airblader.de>
+
+== NAME
+
+unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
+
+== SYNOPSIS
+
+unclutter [-h] [-v]
+
+== OPTIONS
+
+TODO.
+
+== DESCRIPTION
+
+TODO.
