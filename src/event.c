@@ -10,13 +10,14 @@ static void event_init_x_loop(void);
 static void event_init_timer(void);
 static void x_cb(EV_P_ ev_io *w, int revents);
 static void idle_cb(EV_P_ ev_timer *w, int revents);
+static void event_select_xi(void);
 
 void event_init(void) {
-    loop = EV_DEFAULT;
+    event_select_xi();
 
+    loop = EV_DEFAULT;
     event_init_x_loop();
     event_init_timer();
-
     ev_run(loop, 0);
 }
 
@@ -42,4 +43,20 @@ static void x_cb(EV_P_ ev_io *w, int revents) {
 static void idle_cb(EV_P_ ev_timer *w, int revents) {
     // TODO hide mouse if this was called
     DLOG("called idle_cb");
+}
+
+static void event_select_xi(void) {
+    XIEventMask masks[1];
+    unsigned char mask[(XI_LASTEVENT + 7)/8];
+
+    memset(mask, 0, sizeof(mask));
+    XISetMask(mask, XI_RawMotion);
+    XISetMask(mask, XI_RawButtonPress);
+
+    masks[0].deviceid = XIAllMasterDevices;
+    masks[0].mask_len = sizeof(mask);
+    masks[0].mask = mask;
+
+    XISelectEvents(display, DefaultRootWindow(display), masks, 1);
+    XFlush(display);
 }
