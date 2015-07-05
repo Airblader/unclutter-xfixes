@@ -29,9 +29,10 @@ int main(int argc, char *argv[]) {
     atexit(on_exit_hook);
     parse_args(argc, argv);
 
-    if (config.fork)
+    if (config.fork) {
+        DLOG("Forking to background.");
         safe_fork(run);
-    else
+    } else
         run();
 }
 
@@ -47,7 +48,7 @@ static void run(void) {
 }
 
 static void on_exit_hook(void) {
-    // TODO enforce showing cursor here
+    cursor_show();
 
     if (display != NULL)
         XCloseDisplay(display);
