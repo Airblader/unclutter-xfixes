@@ -8,21 +8,21 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [-t <n>] [-b] [-h] [-v]
+unclutter [--timeout <n>] [--fork|-b] [--help|-h] [--version|-v]
 
 == OPTIONS
 
--t <n>::
+--timeout <n>::
 Specifies the number of seconds after which the cursor should be hidden if
 it was neither moved nor any button was pressed.
 
--b::
+--fork|-b::
 Fork unclutter to the background.
 
--h::
+--help|-h::
 Display the usage and exit.
 
--v::
+--version|-v::
 Display the version and exit.
 
 == DESCRIPTION

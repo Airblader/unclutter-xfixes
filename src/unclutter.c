@@ -56,18 +56,32 @@ static void on_exit_hook(void) {
 }
 
 static void parse_args(int argc, char *argv[]) {
-    int c;
-    while ((c = getopt(argc, argv, "t:bvhd")) != -1) {
+    int c,
+        opt_index = 0;
+    static struct option long_options[] = {
+        { "timeout", required_argument, 0, 0 },
+        { "fork", no_argument, 0, 'b' },
+        { "version", no_argument, 0, 'v' },
+        { "help", no_argument, 0, 'h' },
+        { 0, 0, 0, 0 }
+    };
+
+    while ((c = getopt_long(argc, argv, "t:bvhd", long_options, &opt_index)) != -1) {
         long value;
 
         switch (c) {
-            case 't':
-                value = parse_int(optarg);
-                if (value < 0)
-                    ELOG("Invalid timeout specified.");
-                else
-                    config.timeout = value;
+            case 0:
+                if (strcmp(long_options[opt_index].name, "timeout") == 0) {
+                    value = parse_int(optarg);
+                    if (value < 0)
+                        ELOG("Invalid timeout specified.");
+                    else
+                        config.timeout = value;
 
+                    break;
+                }
+
+                print_usage(argv);
                 break;
             case 'b':
                 config.fork = true;
@@ -89,7 +103,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [-t <n>] [-b] [-v] [-h]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
