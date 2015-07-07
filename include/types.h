@@ -3,6 +3,7 @@
 
 typedef struct Config {
     long timeout;
+    bool exclude_root;
     bool fork;
     bool debug;
 } Config;

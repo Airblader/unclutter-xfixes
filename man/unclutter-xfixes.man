@@ -8,13 +8,18 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [--timeout <n>] [--fork|-b] [--help|-h] [--version|-v]
+unclutter [--timeout <n>] [--exclude-root] [--fork|-b] [--help|-h] [--version|-v]
 
 == OPTIONS
 
 --timeout <n>::
 Specifies the number of seconds after which the cursor should be hidden if
 it was neither moved nor any button was pressed.
+
+--exclude-root::
+Don't hide the mouse cursor if it is idling over the root window and not an
+actual window since in this case it isn't obscuring anything important, but
+rather just the desktop background.
 
 --fork|-b::
 Fork unclutter to the background.

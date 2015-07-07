@@ -55,7 +55,8 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
 }
 
 static void idle_cb(EV_P_ ev_timer *w, int revents) {
-    cursor_hide();
+    if (!config.exclude_root || !cursor_on_root_window())
+        cursor_hide();
 }
 
 static void event_select_xi(void) {

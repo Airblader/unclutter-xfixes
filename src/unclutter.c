@@ -22,6 +22,7 @@ Display *display;
 
 Config config = {
     .timeout = 5,
+    .exclude_root = false,
     .fork = false,
     .debug = false
 };
@@ -60,6 +61,7 @@ static void parse_args(int argc, char *argv[]) {
         opt_index = 0;
     static struct option long_options[] = {
         { "timeout", required_argument, 0, 0 },
+        { "exclude-root", no_argument, 0, 0 },
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
@@ -78,6 +80,9 @@ static void parse_args(int argc, char *argv[]) {
                     else
                         config.timeout = value;
 
+                    break;
+                } else if (strcmp(long_options[opt_index].name, "exclude-root") == 0) {
+                    config.exclude_root = true;
                     break;
                 }
 
@@ -103,7 +108,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--exclude-root] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
