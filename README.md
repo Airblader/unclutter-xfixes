@@ -12,7 +12,7 @@ This is a rewrite of the popular tool unclutter, but using the x11-xfixes extens
 
 ### Arch / Manjaro (AUR)
 
-unclutter-xfixes is available in the AUR as [unclutter-xfixes](https://aur.archlinux.org/packages/unclutter-xfixes-git/).
+unclutter-xfixes is available in the AUR as [unclutter-xfixes-git](https://aur.archlinux.org/packages/unclutter-xfixes-git/).
 
 ### Manual
 
