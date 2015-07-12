@@ -14,7 +14,7 @@ unclutter [--timeout <n>] [--exclude-root] [--fork|-b] [--help|-h] [--version|-v
 
 --timeout <n>::
 Specifies the number of seconds after which the cursor should be hidden if
-it was neither moved nor any button was pressed.
+it was neither moved nor any button was pressed. (Default: 5)
 
 --exclude-root::
 Don't hide the mouse cursor if it is idling over the root window and not an
