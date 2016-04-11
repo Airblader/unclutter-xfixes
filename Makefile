@@ -11,7 +11,7 @@ MANDIR = /usr/share/man/man1
 CC = gcc
 CFLAGS += -I$(IDIR)
 CFLAGS += -std=gnu99
-CFLAGS += -Wall -Wundef -Wshadow
+CFLAGS += -Wall -Wundef -Wshadow -Wformat-security
 LIBS = $(shell pkg-config --libs x11 xi xfixes)
 # libev has no pkg-config support
 LIBS += -lev

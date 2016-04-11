@@ -3,7 +3,7 @@
 
 void bail(char *message) {
     ELOG("Received error: %s", message);
-    errx(EXIT_FAILURE, message);
+    errx(EXIT_FAILURE, "%s", message);
 }
 
 long parse_int(char *str) {
