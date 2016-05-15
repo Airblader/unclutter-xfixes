@@ -6,6 +6,8 @@ static ev_timer idle_watcher;
 static ev_io x_watcher;
 static ev_check x_check;
 
+static coordinates_t last_cursor_pos;
+
 /* Forward declarations */
 static void event_init_x_loop(void);
 static void event_init_timer(void);
@@ -46,11 +48,30 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
         XNextEvent(display, &ev);
 
         XGenericEventCookie *cookie = &ev.xcookie;
-        if (XGetEventData(display, cookie) && cookie->type == GenericEvent && cookie->extension == xi_ext_opcode) {
-            /* We don't bother checking the exact event since we only select events that interest us. */
-            cursor_show();
-            ev_timer_again(loop, &idle_watcher);
+        if (!XGetEventData(display, cookie) || cookie->type != GenericEvent || cookie->extension != xi_ext_opcode) {
+            continue;
         }
+
+        if (config.jitter > 0 && cookie->evtype == XI_RawMotion) {
+            Window root, child;
+            int root_x, root_y, win_x, win_y;
+            unsigned int mask;
+
+            XQueryPointer(display, DefaultRootWindow(display), &root, &child, &root_x, &root_y, &win_x, &win_y, &mask);
+
+            int dx = last_cursor_pos.x - root_x;
+            int dy = last_cursor_pos.y - root_y;
+            if (dx * dx + dy * dy < config.jitter * config.jitter) {
+                continue;
+            }
+
+            last_cursor_pos.x = root_x;
+            last_cursor_pos.y = root_y;
+        }
+
+        /* We don't bother checking the exact event since we only select events that interest us. */
+        cursor_show();
+        ev_timer_again(loop, &idle_watcher);
     }
 }
 
