@@ -22,6 +22,7 @@ Display *display;
 
 Config config = {
     .timeout = 5,
+    .jitter = 0,
     .exclude_root = false,
     .fork = false,
     .debug = false
@@ -61,6 +62,7 @@ static void parse_args(int argc, char *argv[]) {
         opt_index = 0;
     static struct option long_options[] = {
         { "timeout", required_argument, 0, 0 },
+        { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
@@ -68,7 +70,7 @@ static void parse_args(int argc, char *argv[]) {
         { 0, 0, 0, 0 }
     };
 
-    while ((c = getopt_long(argc, argv, "t:bvhd", long_options, &opt_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "t:j:bvhd", long_options, &opt_index)) != -1) {
         long value;
 
         switch (c) {
@@ -79,6 +81,14 @@ static void parse_args(int argc, char *argv[]) {
                         ELOG("Invalid timeout specified.");
                     else
                         config.timeout = value;
+
+                    break;
+                } else if (strcmp(long_options[opt_index].name, "jitter") == 0) {
+                    value = parse_int(optarg);
+                    if (value < 0)
+                        ELOG("Invalid jitter value specified.");
+                    else
+                        config.jitter = value;
 
                     break;
                 } else if (strcmp(long_options[opt_index].name, "exclude-root") == 0) {
@@ -108,7 +118,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--exclude-root] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }

@@ -3,7 +3,13 @@
 
 typedef struct Config {
     long timeout;
+    long jitter;
     bool exclude_root;
     bool fork;
     bool debug;
 } Config;
+
+typedef struct coordinates_t {
+    int x;
+    int y;
+} coordinates_t;
