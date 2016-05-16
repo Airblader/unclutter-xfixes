@@ -2,9 +2,9 @@
 #include "all.h"
 
 static struct ev_loop *loop;
-static ev_timer idle_watcher;
-static ev_io x_watcher;
-static ev_check x_check;
+static ev_timer *idle_watcher;
+static ev_io *x_watcher;
+static ev_check *x_check;
 
 static coordinates_t last_cursor_pos;
 
@@ -26,16 +26,16 @@ void event_init(void) {
 }
 
 static void event_init_x_loop(void) {
-    ev_io_init(&x_watcher, x_cb, XConnectionNumber(display), EV_READ);
-    ev_io_start(loop, &x_watcher);
+    ev_io_init(x_watcher, x_cb, XConnectionNumber(display), EV_READ);
+    ev_io_start(loop, x_watcher);
 
-    ev_check_init(&x_check, x_check_cb);
-    ev_check_start(loop, &x_check);
+    ev_check_init(x_check, x_check_cb);
+    ev_check_start(loop, x_check);
 }
 
 static void event_init_timer(void) {
-    ev_timer_init(&idle_watcher, idle_cb, 0, config.timeout);
-    ev_timer_start(loop, &idle_watcher);
+    ev_timer_init(idle_watcher, idle_cb, 0, config.timeout);
+    ev_timer_start(loop, idle_watcher);
 }
 
 static void x_cb(EV_P_ ev_io *w, int revents) {
@@ -75,7 +75,7 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
 
         /* We don't bother checking the exact event since we only select events that interest us. */
         cursor_show();
-        ev_timer_again(loop, &idle_watcher);
+        ev_timer_again(loop, idle_watcher);
     }
 }
 
