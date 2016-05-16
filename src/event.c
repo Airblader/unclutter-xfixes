@@ -48,9 +48,13 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
         XNextEvent(display, &ev);
 
         XGenericEventCookie *cookie = &ev.xcookie;
-        if (!XGetEventData(display, cookie) || cookie->type != GenericEvent || cookie->extension != xi_ext_opcode) {
+        if (cookie->type != GenericEvent || cookie->extension != xi_ext_opcode ||
+                !XGetEventData(display, cookie)) {
             continue;
         }
+
+        /* We don't actually need the data, so get rid of it. */
+        XFreeEventData(display, cookie);
 
         if (config.jitter > 0 && cookie->evtype == XI_RawMotion) {
             Window root, child;
