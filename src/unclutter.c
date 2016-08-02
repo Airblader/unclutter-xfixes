@@ -24,6 +24,7 @@ Config config = {
     .timeout = 5,
     .jitter = 0,
     .exclude_root = false,
+    .ignore_scrolling = false,
     .fork = false,
     .debug = false
 };
@@ -64,6 +65,7 @@ static void parse_args(int argc, char *argv[]) {
         { "timeout", required_argument, 0, 0 },
         { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
+        { "ignore-scrolling", no_argument, 0, 0 },
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
@@ -94,6 +96,9 @@ static void parse_args(int argc, char *argv[]) {
                 } else if (strcmp(long_options[opt_index].name, "exclude-root") == 0) {
                     config.exclude_root = true;
                     break;
+                } else if (strcmp(long_options[opt_index].name, "ignore-scrolling") == 0) {
+                    config.ignore_scrolling = true;
+                    break;
                 }
 
                 print_usage(argv);
@@ -118,7 +123,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
