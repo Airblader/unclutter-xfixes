@@ -56,7 +56,14 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
             continue;
         }
 
-        /* We don't actually need the data, so get rid of it. */
+        if (config.ignore_scrolling && cookie->evtype == XI_RawButtonPress) {
+            const XIRawEvent *data = (const XIRawEvent *) cookie->data;
+            if (data->detail == 4 || data->detail == 5) {
+                XFreeEventData(display, cookie);
+                continue;
+            }
+        }
+
         XFreeEventData(display, cookie);
 
         if (config.jitter > 0 && cookie->evtype == XI_RawMotion) {

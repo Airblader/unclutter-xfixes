@@ -8,7 +8,7 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [--timeout <n>] [--jitter <radius>] [--exclude-root] [--fork|-b] [--help|-h] [--version|-v]
+unclutter [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--fork|-b] [--help|-h] [--version|-v]
 
 == OPTIONS
 
@@ -23,6 +23,10 @@ Ignore cursor movements if the cursor hasn't moved sufficiently far.
 Don't hide the mouse cursor if it is idling over the root window and not an
 actual window since in this case it isn't obscuring anything important, but
 rather just the desktop background.
+
+--ignore-scrolling::
+Ignore mouse scroll events (buttons 4 and 5) so that scrolling doesn't unhide
+the cursor.
 
 --fork|-b::
 Fork unclutter to the background.

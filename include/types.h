@@ -5,6 +5,7 @@ typedef struct Config {
     long timeout;
     long jitter;
     bool exclude_root;
+    bool ignore_scrolling;
     bool fork;
     bool debug;
 } Config;
