@@ -62,6 +62,18 @@ static void parse_args(int argc, char *argv[]) {
     int c,
         opt_index = 0;
     static struct option long_options[] = {
+        /* Compatibility options */
+        { "display", required_argument, 0, 0 },
+        { "idle", required_argument, 0, 0 },
+        { "keystroke", no_argument, 0, 0 },
+        { "grab", no_argument, 0, 0 },
+        { "noevents", no_argument, 0, 0 },
+        { "reset", no_argument, 0, 0 },
+        { "root", no_argument, 0, 0 },
+        { "onescreen", no_argument, 0, 0 },
+        { "not", required_argument, 0, 0 },
+
+        /* unclutter-xfixes options */
         { "timeout", required_argument, 0, 0 },
         { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
@@ -69,15 +81,19 @@ static void parse_args(int argc, char *argv[]) {
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
+        { "debug", no_argument, 0, 0 },
         { 0, 0, 0, 0 }
     };
 
-    while ((c = getopt_long(argc, argv, "t:j:bvhd", long_options, &opt_index)) != -1) {
+    while ((c = getopt_long_only(argc, argv, "t:j:bvhd:", long_options, &opt_index)) != -1) {
         long value;
+        const char *opt_name = long_options[opt_index].name;
+
+#define OPT_NAME_IS(name) (strcmp(opt_name, (name)) == 0)
 
         switch (c) {
             case 0:
-                if (strcmp(long_options[opt_index].name, "timeout") == 0) {
+                if (OPT_NAME_IS("timeout") || OPT_NAME_IS("idle")) {
                     value = parse_int(optarg);
                     if (value < 0)
                         ELOG("Invalid timeout specified.");
@@ -85,7 +101,7 @@ static void parse_args(int argc, char *argv[]) {
                         config.timeout = value;
 
                     break;
-                } else if (strcmp(long_options[opt_index].name, "jitter") == 0) {
+                } else if (OPT_NAME_IS("jitter")) {
                     value = parse_int(optarg);
                     if (value < 0)
                         ELOG("Invalid jitter value specified.");
@@ -93,11 +109,19 @@ static void parse_args(int argc, char *argv[]) {
                         config.jitter = value;
 
                     break;
-                } else if (strcmp(long_options[opt_index].name, "exclude-root") == 0) {
+                } else if (OPT_NAME_IS("exclude-root")) {
                     config.exclude_root = true;
                     break;
-                } else if (strcmp(long_options[opt_index].name, "ignore-scrolling") == 0) {
+                } else if (OPT_NAME_IS("ignore-scrolling")) {
                     config.ignore_scrolling = true;
+                    break;
+                } else if (OPT_NAME_IS("debug")) {
+                    config.debug = true;
+                    break;
+                } else if (OPT_NAME_IS("display") || OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") ||
+                        OPT_NAME_IS("noevents") || OPT_NAME_IS("reset") || OPT_NAME_IS("root") ||
+                        OPT_NAME_IS("onescreen") || OPT_NAME_IS("not")) {
+                    ELOG("Using unsupported unclutter argument \"%s\", ignoring.", opt_name);
                     break;
                 }
 
@@ -111,8 +135,7 @@ static void parse_args(int argc, char *argv[]) {
                 exit(EXIT_SUCCESS);
                 break;
             case 'd':
-                config.debug = true;
-                DLOG("Debug logging enabled.");
+                ELOG("Using unsupported unclutter argument \"d\", ignoring.");
                 break;
             case 'h':
             default:
@@ -120,6 +143,9 @@ static void parse_args(int argc, char *argv[]) {
                 break;
         }
     }
+
+#undef OPT_NAME_IS
+
 }
 
 static void print_usage(char *argv[]) {
