@@ -47,7 +47,8 @@ In order to be used as a drop-in replacement of unclutter, unclutter-xfixes
 accepts all command line arguments of unclutter, but ignores most of them.
 
 *--display*|*-d* _display_::
-This argument is ignored.
+Specifies the X display to use. The same effect can be achieved by setting the
+*DISPLAY* environment variable.
 
 *--idle* _seconds_::
 This argument is mapped to *--timeout*.

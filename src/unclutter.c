@@ -93,7 +93,10 @@ static void parse_args(int argc, char *argv[]) {
 
         switch (c) {
             case 0:
-                if (OPT_NAME_IS("timeout") || OPT_NAME_IS("idle")) {
+                if (OPT_NAME_IS("display")) {
+                    setenv("DISPLAY", optarg, true);
+                    break;
+                } else if (OPT_NAME_IS("timeout") || OPT_NAME_IS("idle")) {
                     value = parse_int(optarg);
                     if (value < 0)
                         ELOG("Invalid timeout specified.");
@@ -118,7 +121,7 @@ static void parse_args(int argc, char *argv[]) {
                 } else if (OPT_NAME_IS("debug")) {
                     config.debug = true;
                     break;
-                } else if (OPT_NAME_IS("display") || OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") ||
+                } else if (OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") ||
                         OPT_NAME_IS("noevents") || OPT_NAME_IS("reset") || OPT_NAME_IS("root") ||
                         OPT_NAME_IS("onescreen") || OPT_NAME_IS("not")) {
                     ELOG("Using unsupported unclutter argument \"%s\", ignoring.", opt_name);
@@ -135,7 +138,7 @@ static void parse_args(int argc, char *argv[]) {
                 exit(EXIT_SUCCESS);
                 break;
             case 'd':
-                ELOG("Using unsupported unclutter argument \"d\", ignoring.");
+                setenv("DISPLAY", optarg, true);
                 break;
             case 'h':
             default:
