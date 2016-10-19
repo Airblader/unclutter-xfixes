@@ -1,0 +1,7 @@
+The following list contains the dependencies for unclutter-xfixes:
+
+ev
+X11
+xfixes
+xi
+asciidoc (make)
