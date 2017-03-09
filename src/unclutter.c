@@ -107,6 +107,7 @@ static void parse_args(int argc, char *argv[]) {
 
     while ((c = getopt_long_only(argc, argv, "t:j:bvhd:", long_options, &opt_index)) != -1) {
         long value;
+        double value_double;
         const char *opt_name = long_options[opt_index].name;
 
 #define OPT_NAME_IS(name) (strcmp(opt_name, (name)) == 0)
@@ -117,11 +118,11 @@ static void parse_args(int argc, char *argv[]) {
                     setenv("DISPLAY", optarg, true);
                     break;
                 } else if (OPT_NAME_IS("timeout") || OPT_NAME_IS("idle")) {
-                    value = parse_int(optarg);
-                    if (value < 0)
+                    value_double = parse_double(optarg);
+                    if (value_double < 0)
                         ELOG("Invalid timeout specified.");
                     else
-                        config.timeout = value;
+                        config.timeout = value_double;
 
                     break;
                 } else if (OPT_NAME_IS("jitter")) {

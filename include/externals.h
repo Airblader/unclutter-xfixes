@@ -7,6 +7,7 @@
 #include <string.h>
 #include <err.h>
 #include <ev.h>
+#include <float.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
