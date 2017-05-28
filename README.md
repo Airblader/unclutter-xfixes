@@ -18,7 +18,7 @@ unclutter-xfixes is available in the AUR as [unclutter-xfixes-git](https://aur.a
 
 unclutter-xfixes is make-based. Hence, you can clone the git repository and compile and install it via
 
-````
+```
 git clone https://github.com/Airblader/unclutter-xfixes
 cd unclutter-xfixes
 make
