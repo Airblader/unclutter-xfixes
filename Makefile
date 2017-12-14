@@ -10,9 +10,12 @@ BINDIR = $(PREFIX)/bin
 MANDIR = $(PREFIX)/share/man/man1
 
 CC = gcc
-CFLAGS += -I$(IDIR)
+
+CPPFLAGS += -D'__VERSION="$(shell git describe --all --long --always)"' "-I$(IDIR)"
+
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wundef -Wshadow -Wformat-security
+
 LIBS = $(shell pkg-config --libs x11 xi xfixes)
 # libev has no pkg-config support
 LIBS += -lev
@@ -33,7 +36,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
-	$(CC) -D'__VERSION="$(shell git describe --all --long --always)"' $(CFLAGS) -o $@ -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o "$@" -c "$<"
 
 .PHONY: install
 install: $(TARGET)
