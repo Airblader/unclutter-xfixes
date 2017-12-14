@@ -4,9 +4,10 @@ IDIR = include
 ODIR = obj
 
 INSTALL = install
-PREFIX = /usr/bin
+PREFIX = /usr
 
-MANDIR = /usr/share/man/man1
+BINDIR = $(PREFIX)/bin
+MANDIR = $(PREFIX)/share/man/man1
 
 CC = gcc
 CFLAGS += -I$(IDIR)
@@ -36,13 +37,13 @@ $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
 
 .PHONY: install
 install: $(TARGET)
-	$(INSTALL) -Dm 0755 $(TARGET) $(DESTDIR)$(PREFIX)/$(TARGET)
-	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 $(DESTDIR)$(MANDIR)/unclutter.1
+	$(INSTALL) -Dm 0755 "$(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)"
+	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 "$(DESTDIR)$(MANDIR)/unclutter.1"
 
 .PHONY: uninstall
 uninstall:
-	$(RM) $(DESTDIR)$(PREFIX)/$(TARGET)
-	$(RM) $(DESTDIR)$(MANDIR)/unclutter.1
+	$(RM) "$(DESTDIR)$(BINDIR)/$(TARGET)"
+	$(RM) "$(DESTDIR)$(MANDIR)/unclutter.1"
 
 .PHONY: mans
 mans: $(MANS)
