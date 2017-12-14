@@ -10,15 +10,16 @@ BINDIR = $(PREFIX)/bin
 MANDIR = $(PREFIX)/share/man/man1
 
 CC = gcc
+LD = $(CC)
 
 CPPFLAGS += -D'__VERSION="$(shell git describe --all --long --always)"' "-I$(IDIR)"
 
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wundef -Wshadow -Wformat-security
 
-LIBS = $(shell pkg-config --libs x11 xi xfixes)
+LDFLAGS += $(shell pkg-config --libs x11 xi xfixes)
 # libev has no pkg-config support
-LIBS += -lev
+LDFLAGS += -lev
 
 INCS = $(wildcard $(IDIR)/*.h)
 SRCS = $(wildcard $(SDIR)/*.c)
@@ -33,7 +34,7 @@ all: clean $(TARGET) mans
 
 .PHONY: $(TARGET)
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
+	$(LD) $(LDFLAGS) -o $(TARGET) $(OBJS)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o "$@" -c "$<"
