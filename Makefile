@@ -4,17 +4,22 @@ IDIR = include
 ODIR = obj
 
 INSTALL = install
-PREFIX = /usr/bin
+PREFIX = /usr
 
-MANDIR = /usr/share/man/man1
+BINDIR = $(PREFIX)/bin
+MANDIR = $(PREFIX)/share/man/man1
 
 CC = gcc
-CFLAGS += -I$(IDIR)
+LD = $(CC)
+
+CPPFLAGS += -D'__VERSION="$(shell git describe --all --long --always)"' "-I$(IDIR)"
+
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wundef -Wshadow -Wformat-security
-LIBS = $(shell pkg-config --libs x11 xi xfixes)
+
+LDFLAGS += $(shell pkg-config --libs x11 xi xfixes)
 # libev has no pkg-config support
-LIBS += -lev
+LDFLAGS += -lev
 
 INCS = $(wildcard $(IDIR)/*.h)
 SRCS = $(wildcard $(SDIR)/*.c)
@@ -29,26 +34,26 @@ all: clean $(TARGET) mans
 
 .PHONY: $(TARGET)
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
+	$(LD) $(LDFLAGS) -o $(TARGET) $(OBJS)
 
 $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
-	$(CC) -D'__VERSION="$(shell git describe --all --long --always)"' $(CFLAGS) -o $@ -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o "$@" -c "$<"
 
 .PHONY: install
-install: $(TARGET)
-	$(INSTALL) -Dm 0755 $(TARGET) $(DESTDIR)$(PREFIX)/$(TARGET)
-	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 $(DESTDIR)$(MANDIR)/unclutter.1
+install: $(TARGET) mans
+	$(INSTALL) -Dm 0755 "$(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)"
+	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 "$(DESTDIR)$(MANDIR)/unclutter.1"
 
 .PHONY: uninstall
 uninstall:
-	$(RM) $(DESTDIR)$(PREFIX)/$(TARGET)
-	$(RM) $(DESTDIR)$(MANDIR)/unclutter.1
+	$(RM) "$(DESTDIR)$(BINDIR)/$(TARGET)"
+	$(RM) "$(DESTDIR)$(MANDIR)/unclutter.1"
 
 .PHONY: mans
 mans: $(MANS)
 
 $(MANS): %.1: %.man
-	a2x --no-xmllint -f manpage $<
+	a2x --no-xmllint -f manpage "$<"
 
 .PHONY: clean
 clean:
