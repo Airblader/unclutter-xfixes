@@ -40,7 +40,7 @@ $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o "$@" -c "$<"
 
 .PHONY: install
-install: $(TARGET)
+install: $(TARGET) mans
 	$(INSTALL) -Dm 0755 "$(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)"
 	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 "$(DESTDIR)$(MANDIR)/unclutter.1"
 
