@@ -34,14 +34,14 @@ all: clean $(TARGET) mans
 
 .PHONY: $(TARGET)
 $(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) -o $(TARGET) $(OBJS)
+	$(LD) $(OBJS) $(LDFLAGS) -o "$(TARGET)"
 
 $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o "$@" -c "$<"
 
 .PHONY: install
 install: $(TARGET) mans
-	$(INSTALL) -Dm 0755 "$(TARGET) $(DESTDIR)$(BINDIR)/$(TARGET)"
+	$(INSTALL) -Dm 0755 "$(TARGET)" "$(DESTDIR)$(BINDIR)/$(TARGET)"
 	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 "$(DESTDIR)$(MANDIR)/unclutter.1"
 
 .PHONY: uninstall
