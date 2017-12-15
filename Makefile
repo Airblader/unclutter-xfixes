@@ -53,7 +53,7 @@ uninstall:
 mans: $(MANS)
 
 $(MANS): %.1: %.man
-	a2x --no-xmllint -f manpage $<
+	a2x --no-xmllint -f manpage "$<"
 
 .PHONY: clean
 clean:
