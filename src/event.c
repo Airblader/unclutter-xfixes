@@ -37,7 +37,7 @@ static void event_init_x_loop(void) {
 
 static void event_init_timer(void) {
     idle_watcher = calloc(sizeof(struct ev_timer), 1);
-    ev_timer_init(idle_watcher, idle_cb, 0, config.timeout);
+    ev_timer_init(idle_watcher, idle_cb, config.timeout, config.timeout);
     ev_timer_start(loop, idle_watcher);
 }
 
@@ -101,6 +101,7 @@ static void event_select_xi(void) {
     memset(mask, 0, sizeof(mask));
     XISetMask(mask, XI_RawMotion);
     XISetMask(mask, XI_RawButtonPress);
+    XISetMask(mask, XI_RawTouchUpdate);
 
     masks[0].deviceid = XIAllMasterDevices;
     masks[0].mask_len = sizeof(mask);
