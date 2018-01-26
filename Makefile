@@ -11,13 +11,14 @@ MANDIR = $(PREFIX)/share/man/man1
 
 CC = gcc
 LD = $(CC)
+PKG_CONFIG = pkg-config
 
 CPPFLAGS += -D'__VERSION="$(shell git describe --all --long --always)"' "-I$(IDIR)"
 
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wundef -Wshadow -Wformat-security
 
-LDFLAGS += $(shell pkg-config --libs x11 xi xfixes)
+LDFLAGS += $(shell $(PKG_CONFIG) --libs x11 xi xfixes)
 # libev has no pkg-config support
 LDFLAGS += -lev
 
