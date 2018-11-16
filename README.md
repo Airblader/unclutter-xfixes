@@ -14,6 +14,10 @@ This is a rewrite of the popular tool unclutter, but using the x11-xfixes extens
 
 unclutter-xfixes is available in the AUR as [unclutter-xfixes-git](https://aur.archlinux.org/packages/unclutter-xfixes-git/).
 
+### Fedora
+
+unclutter-xfixes is available [via a copr repository](https://copr.fedorainfracloud.org/coprs/nbeernink/unclutter-xfixes/).
+
 ### FreeBSD
 
 unclutter-xfixes is available in the FreeBSD Ports Collection as [misc/unclutter-xfixes](https://www.freshports.org/misc/unclutter-xfixes/).
