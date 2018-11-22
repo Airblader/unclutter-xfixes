@@ -1,5 +1,5 @@
 TARGET = unclutter
-VERSION = 1.4
+VERSION = 1.5
 SDIR = src
 IDIR = include
 ODIR = obj
