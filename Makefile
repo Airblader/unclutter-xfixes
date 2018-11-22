@@ -1,4 +1,5 @@
 TARGET = unclutter
+VERSION = 1.4
 SDIR = src
 IDIR = include
 ODIR = obj
@@ -13,7 +14,7 @@ CC = gcc
 LD = $(CC)
 PKG_CONFIG = pkg-config
 
-CPPFLAGS += -D'__VERSION="$(shell git describe --all --long --always)"' "-I$(IDIR)"
+CPPFLAGS += -D'__VERSION="${VERSION}"' "-I$(IDIR)"
 
 CFLAGS += -std=gnu99
 CFLAGS += -Wall -Wundef -Wshadow -Wformat-security
