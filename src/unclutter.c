@@ -1,4 +1,4 @@
-// vim:ts=4:sw=4:expandtab
+// vim:ts=4:sw=4:expandtab -*- c-basic-offset:4 tab-width:4 -*-
 #include "all.h"
 #include <getopt.h>
 #include <unistd.h>
@@ -17,8 +17,19 @@ static void on_exit_hook(void);
 static void parse_args(int argc, char *argv[]);
 static void print_usage(char *argv[]);
 static void safe_fork(callback child_callback);
+static void display_init();
 
 Display *display;
+
+int num_screens;
+Window *roots;   // root of each screen
+
+// screen and root window the cursor is in, as set in cursor_find
+int active_screen;
+Window active_root;
+
+// the screen to use with the onescreen option
+int default_screen;
 
 Config config = {
     .timeout = 5,
@@ -26,7 +37,10 @@ Config config = {
     .exclude_root = false,
     .ignore_scrolling = false,
     .fork = false,
-    .debug = false
+    .debug = false,
+    .onescreen = false,
+    .ignore_matches = false,
+    .matches = NULL
 };
 
 int main(int argc, char *argv[]) {
@@ -45,6 +59,7 @@ static void run(void) {
     if (display == NULL)
         bail("Failed to connect to the X server.");
 
+    display_init();
     extensions_init();
     event_init();
 
@@ -71,7 +86,7 @@ static void parse_args(int argc, char *argv[]) {
         { "reset", no_argument, 0, 0 },
         { "root", no_argument, 0, 0 },
         { "onescreen", no_argument, 0, 0 },
-        { "not", required_argument, 0, 0 },
+        { "not", no_argument, 0, 0 },
 
         /* unclutter-xfixes options */
         { "timeout", required_argument, 0, 0 },
@@ -115,15 +130,22 @@ static void parse_args(int argc, char *argv[]) {
                 } else if (OPT_NAME_IS("exclude-root")) {
                     config.exclude_root = true;
                     break;
+                } else if (OPT_NAME_IS("root")) {
+                    config.exclude_root = false;
+                    break;
+                } else if (OPT_NAME_IS("onescreen")) {
+                    config.onescreen = true;
+                    break;
+                } else if (OPT_NAME_IS("not")) {
+                    config.ignore_matches = true;
+                    break;
                 } else if (OPT_NAME_IS("ignore-scrolling")) {
                     config.ignore_scrolling = true;
                     break;
                 } else if (OPT_NAME_IS("debug")) {
                     config.debug = true;
                     break;
-                } else if (OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") ||
-                        OPT_NAME_IS("noevents") || OPT_NAME_IS("reset") || OPT_NAME_IS("root") ||
-                        OPT_NAME_IS("onescreen") || OPT_NAME_IS("not")) {
+                } else if (OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") || OPT_NAME_IS("noevents") || OPT_NAME_IS("reset")) {
                     ELOG("Using unsupported unclutter argument \"%s\", ignoring.", opt_name);
                     break;
                 }
@@ -144,6 +166,17 @@ static void parse_args(int argc, char *argv[]) {
             default:
                 print_usage(argv);
                 break;
+        }
+    }
+
+    if (config.ignore_matches) {
+        config.matches = calloc(sizeof(match_t), argc - optind + 1);
+        if (config.matches == NULL)
+            bail("Failed to allocate space for matches");
+        for (c = 0; optind < argc; c++, optind++) {
+            char *name = argv[optind];
+            config.matches[c].name = name;
+            config.matches[c].len = name ? strlen(name) : 0;
         }
     }
 
@@ -168,4 +201,22 @@ static void safe_fork(callback child_callback) {
     } else {
         waitpid(pid, NULL, 0);
     }
+}
+
+static void display_init() {
+    int screen;
+    Window child;
+    int root_x, root_y;
+
+    num_screens = ScreenCount(display);
+    roots = calloc(sizeof(Window), num_screens);
+    if (roots == NULL)
+        bail("Failed to allocate root windows.");
+
+    for (screen = 0; screen < num_screens; screen++)
+        roots[screen] = XRootWindow(display, screen);
+    active_screen = DefaultScreen(display);
+    active_root = RootWindow(display, active_screen);
+    default_screen = active_screen;
+    cursor_find(&child, &root_x, &root_y);
 }

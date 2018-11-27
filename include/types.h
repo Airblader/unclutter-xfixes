@@ -1,5 +1,10 @@
-// vim:ts=4:sw=4:expandtab
+// vim:ts=4:sw=4:expandtab -*- c-basic-offset:4 tab-width:4 -*-
 #pragma once
+
+typedef struct match_t {
+    char *name;
+    int len;
+} match_t;
 
 typedef struct Config {
     long timeout;
@@ -8,9 +13,13 @@ typedef struct Config {
     bool ignore_scrolling;
     bool fork;
     bool debug;
+    bool onescreen;
+    bool ignore_matches;
+    match_t *matches;
 } Config;
 
 typedef struct coordinates_t {
     int x;
     int y;
 } coordinates_t;
+

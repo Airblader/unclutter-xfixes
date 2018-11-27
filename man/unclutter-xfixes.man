@@ -66,14 +66,19 @@ This argument is ignored.
 This argument is ignored.
 
 *--root*::
-This argument is ignored as this is the default behavior in unclutter-xfixes.
-See *--exclude-root*.
+This argument does the opposite of *--exclude-root*.
+Shouldn't need to be given, as this is the default behavior in unclutter-xfixes.
 
 *--onescreen*::
-This argument is ignored.
+This argument restricts unclutter to the single screen specified in *--display*
+or to the default screen of the display.
 
 *--not*::
-This argument is ignored.
+This argument will result in all arguments that aren't options or option arguments, to be collected
+into a list that specifies windows where the cursor shall not be removed. These will be the windows
+where an element of the list matches, in a case insensitive comparison, the starting characters of
+either the WM_NAME, or the name or class of the WM_CLASS, properties of the window. (Note that this
+argument can be given anywhere on the command line.)
 
 == DESCRIPTION
 
