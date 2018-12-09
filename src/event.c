@@ -1,4 +1,4 @@
-// vim:ts=4:sw=4:expandtab
+// vim:ts=4:sw=4:expandtab -*- c-basic-offset:4 tab-width:4 -*-
 #include "all.h"
 
 static struct ev_loop *loop;
@@ -7,6 +7,7 @@ static struct ev_io *x_watcher;
 static struct ev_check *x_check;
 
 static coordinates_t last_cursor_pos;
+static Window last_avoided = None;
 
 /* Forward declarations */
 static void event_init_x_loop(void);
@@ -52,7 +53,7 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
 
         XGenericEventCookie *cookie = &ev.xcookie;
         if (cookie->type != GenericEvent || cookie->extension != xi_ext_opcode ||
-                !XGetEventData(display, cookie)) {
+            !XGetEventData(display, cookie)) {
             continue;
         }
 
@@ -67,12 +68,10 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
         XFreeEventData(display, cookie);
 
         if (config.jitter > 0 && cookie->evtype == XI_RawMotion) {
-            Window root, child;
-            int root_x, root_y, win_x, win_y;
-            unsigned int mask;
+            Window child;
+            int root_x, root_y;
 
-            XQueryPointer(display, DefaultRootWindow(display), &root, &child, &root_x, &root_y, &win_x, &win_y, &mask);
-
+            cursor_find(&child, &root_x, &root_y);
             int dx = last_cursor_pos.x - root_x;
             int dy = last_cursor_pos.y - root_y;
             if (dx * dx + dy * dy < config.jitter * config.jitter) {
@@ -89,9 +88,72 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
     }
 }
 
+static bool name_matches(Window win) {
+    match_t *ignored;
+    XClassHint hint;
+    char *name;
+    bool found = false;
+
+    if (XFetchName(display, win, &name)) {
+        for (ignored = config.matches; ignored->name; ignored++)
+            if((found = strncasecmp(ignored->name, name, ignored->len)==0))
+                break;
+        XFree(name);
+        if (found) return true;
+    }
+    if (XGetClassHint(display, win, &hint)) {
+        for (ignored = config.matches; ignored->name; ignored++)
+            if((found =
+                strncasecmp(ignored->name, hint.res_name, ignored->len)  == 0 ||
+                strncasecmp(ignored->name, hint.res_class, ignored->len) == 0))
+                break;
+        XFree(hint.res_name);
+        XFree(hint.res_class);
+        if (found) return true;
+    }
+
+    return false;
+}
+
+static bool is_on_ignore_list(Window win) {
+    Window child_in;
+    Window win_in;
+    Window win_dummy;
+    int root_x, root_y;
+    int win_x, win_y;
+    unsigned int mask;
+
+    if (win == last_avoided) return true;
+
+    last_avoided = None;
+    child_in = win_in = win;
+
+    do {
+        win_in = child_in;
+        if (name_matches(win_in)) {
+            last_avoided = win;
+            return true;
+        }
+    } while (XQueryPointer(display, win_in, &win_dummy, &child_in, &root_x, &root_y, &win_x, &win_y, &mask)
+             && child_in != None);
+
+    return false;
+}
+
 static void idle_cb(EV_P_ ev_timer *w, int revents) {
-    if (!config.exclude_root || !cursor_on_root_window())
-        cursor_hide();
+    Window child;
+    int root_x, root_y;
+
+    cursor_find(&child, &root_x, &root_y);
+    if (child) { // not on root
+        if (!config.onescreen || active_screen == default_screen)
+            if (!config.ignore_matches || !is_on_ignore_list(child))
+                cursor_hide();
+    } else { // on root
+        if (!config.exclude_root)
+            if (!config.onescreen || active_screen == default_screen)
+                cursor_hide();
+    }
 }
 
 static void event_select_xi(void) {
@@ -107,6 +169,6 @@ static void event_select_xi(void) {
     masks[0].mask_len = sizeof(mask);
     masks[0].mask = mask;
 
-    XISelectEvents(display, DefaultRootWindow(display), masks, 1);
+    XISelectEvents(display, active_root, masks, 1);
     XFlush(display);
 }

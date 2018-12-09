@@ -8,34 +8,77 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--fork|-b] [--help|-h] [--version|-v]
+unclutter [*--timeout* _seconds_] [*--jitter* _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*]
+
+Compatibility arguments:
+
+unclutter [*--display*|*-d* _display_] [*--idle* _seconds_] [*--keystroke*] [*--grab*] [*--noevents*] [*--reset*] [*--root*] [*--onescreen*] [*--not*] _name …_
 
 == OPTIONS
 
---timeout <n>::
+*--timeout* _seconds_::
 Specifies the number of seconds after which the cursor should be hidden if
 it was neither moved nor any button was pressed. (Default: 5)
 
---jitter <radius>::
+*--jitter* _radius_::
 Ignore cursor movements if the cursor hasn't moved sufficiently far.
 
---exclude-root::
+*--exclude-root*::
 Don't hide the mouse cursor if it is idling over the root window and not an
 actual window since in this case it isn't obscuring anything important, but
 rather just the desktop background.
 
---ignore-scrolling::
+*--ignore-scrolling*::
 Ignore mouse scroll events (buttons 4 and 5) so that scrolling doesn't unhide
 the cursor.
 
---fork|-b::
+*--fork*|*-b*::
 Fork unclutter to the background.
 
---help|-h::
+*--help|-h*::
 Display the usage and exit.
 
---version|-v::
+*--version*|*-v*::
 Display the version and exit.
+
+== COMPATIBILITY
+
+In order to be used as a drop-in replacement of unclutter, unclutter-xfixes
+accepts all command line arguments of unclutter, but ignores most of them.
+
+*--display*|*-d* _display_::
+Specifies the X display to use. The same effect can be achieved by setting the
+*DISPLAY* environment variable.
+
+*--idle* _seconds_::
+This argument is mapped to *--timeout*.
+
+*--keystroke*::
+This argument is ignored.
+
+*--grab*::
+This argument is ignored.
+
+*--noevents*::
+This argument is ignored.
+
+*--reset*::
+This argument is ignored.
+
+*--root*::
+This argument does the opposite of *--exclude-root*.
+Shouldn't need to be given, as this is the default behavior in unclutter-xfixes.
+
+*--onescreen*::
+This argument restricts unclutter to the single screen specified in *--display*
+or to the default screen of the display.
+
+*--not*::
+This argument will result in all arguments that aren't options or option arguments, to be collected
+into a list that specifies windows where the cursor shall not be removed. These will be the windows
+where an element of the list matches, in a case insensitive comparison, the starting characters of
+either the WM_NAME, or the name or class of the WM_CLASS, properties of the window. (Note that this
+argument can be given anywhere on the command line.)
 
 == DESCRIPTION
 

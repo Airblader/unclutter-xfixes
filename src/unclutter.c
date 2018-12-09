@@ -1,4 +1,4 @@
-// vim:ts=4:sw=4:expandtab
+// vim:ts=4:sw=4:expandtab -*- c-basic-offset:4 tab-width:4 -*-
 #include "all.h"
 #include <getopt.h>
 #include <unistd.h>
@@ -17,8 +17,19 @@ static void on_exit_hook(void);
 static void parse_args(int argc, char *argv[]);
 static void print_usage(char *argv[]);
 static void safe_fork(callback child_callback);
+static void display_init();
 
 Display *display;
+
+int num_screens;
+Window *roots;   // root of each screen
+
+// screen and root window the cursor is in, as set in cursor_find
+int active_screen;
+Window active_root;
+
+// the screen to use with the onescreen option
+int default_screen;
 
 Config config = {
     .timeout = 5,
@@ -26,7 +37,10 @@ Config config = {
     .exclude_root = false,
     .ignore_scrolling = false,
     .fork = false,
-    .debug = false
+    .debug = false,
+    .onescreen = false,
+    .ignore_matches = false,
+    .matches = NULL
 };
 
 int main(int argc, char *argv[]) {
@@ -45,6 +59,7 @@ static void run(void) {
     if (display == NULL)
         bail("Failed to connect to the X server.");
 
+    display_init();
     extensions_init();
     event_init();
 
@@ -62,6 +77,18 @@ static void parse_args(int argc, char *argv[]) {
     int c,
         opt_index = 0;
     static struct option long_options[] = {
+        /* Compatibility options */
+        { "display", required_argument, 0, 0 },
+        { "idle", required_argument, 0, 0 },
+        { "keystroke", no_argument, 0, 0 },
+        { "grab", no_argument, 0, 0 },
+        { "noevents", no_argument, 0, 0 },
+        { "reset", no_argument, 0, 0 },
+        { "root", no_argument, 0, 0 },
+        { "onescreen", no_argument, 0, 0 },
+        { "not", no_argument, 0, 0 },
+
+        /* unclutter-xfixes options */
         { "timeout", required_argument, 0, 0 },
         { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
@@ -69,15 +96,22 @@ static void parse_args(int argc, char *argv[]) {
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
+        { "debug", no_argument, 0, 0 },
         { 0, 0, 0, 0 }
     };
 
-    while ((c = getopt_long(argc, argv, "t:j:bvhd", long_options, &opt_index)) != -1) {
+    while ((c = getopt_long_only(argc, argv, "t:j:bvhd:", long_options, &opt_index)) != -1) {
         long value;
+        const char *opt_name = long_options[opt_index].name;
+
+#define OPT_NAME_IS(name) (strcmp(opt_name, (name)) == 0)
 
         switch (c) {
             case 0:
-                if (strcmp(long_options[opt_index].name, "timeout") == 0) {
+                if (OPT_NAME_IS("display")) {
+                    setenv("DISPLAY", optarg, true);
+                    break;
+                } else if (OPT_NAME_IS("timeout") || OPT_NAME_IS("idle")) {
                     value = parse_int(optarg);
                     if (value < 0)
                         ELOG("Invalid timeout specified.");
@@ -85,7 +119,7 @@ static void parse_args(int argc, char *argv[]) {
                         config.timeout = value;
 
                     break;
-                } else if (strcmp(long_options[opt_index].name, "jitter") == 0) {
+                } else if (OPT_NAME_IS("jitter")) {
                     value = parse_int(optarg);
                     if (value < 0)
                         ELOG("Invalid jitter value specified.");
@@ -93,11 +127,26 @@ static void parse_args(int argc, char *argv[]) {
                         config.jitter = value;
 
                     break;
-                } else if (strcmp(long_options[opt_index].name, "exclude-root") == 0) {
+                } else if (OPT_NAME_IS("exclude-root")) {
                     config.exclude_root = true;
                     break;
-                } else if (strcmp(long_options[opt_index].name, "ignore-scrolling") == 0) {
+                } else if (OPT_NAME_IS("root")) {
+                    config.exclude_root = false;
+                    break;
+                } else if (OPT_NAME_IS("onescreen")) {
+                    config.onescreen = true;
+                    break;
+                } else if (OPT_NAME_IS("not")) {
+                    config.ignore_matches = true;
+                    break;
+                } else if (OPT_NAME_IS("ignore-scrolling")) {
                     config.ignore_scrolling = true;
+                    break;
+                } else if (OPT_NAME_IS("debug")) {
+                    config.debug = true;
+                    break;
+                } else if (OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") || OPT_NAME_IS("noevents") || OPT_NAME_IS("reset")) {
+                    ELOG("Using unsupported unclutter argument \"%s\", ignoring.", opt_name);
                     break;
                 }
 
@@ -111,8 +160,7 @@ static void parse_args(int argc, char *argv[]) {
                 exit(EXIT_SUCCESS);
                 break;
             case 'd':
-                config.debug = true;
-                DLOG("Debug logging enabled.");
+                setenv("DISPLAY", optarg, true);
                 break;
             case 'h':
             default:
@@ -120,6 +168,20 @@ static void parse_args(int argc, char *argv[]) {
                 break;
         }
     }
+
+    if (config.ignore_matches) {
+        config.matches = calloc(sizeof(match_t), argc - optind + 1);
+        if (config.matches == NULL)
+            bail("Failed to allocate space for matches");
+        for (c = 0; optind < argc; c++, optind++) {
+            char *name = argv[optind];
+            config.matches[c].name = name;
+            config.matches[c].len = name ? strlen(name) : 0;
+        }
+    }
+
+#undef OPT_NAME_IS
+
 }
 
 static void print_usage(char *argv[]) {
@@ -139,4 +201,22 @@ static void safe_fork(callback child_callback) {
     } else {
         waitpid(pid, NULL, 0);
     }
+}
+
+static void display_init() {
+    int screen;
+    Window child;
+    int root_x, root_y;
+
+    num_screens = ScreenCount(display);
+    roots = calloc(sizeof(Window), num_screens);
+    if (roots == NULL)
+        bail("Failed to allocate root windows.");
+
+    for (screen = 0; screen < num_screens; screen++)
+        roots[screen] = XRootWindow(display, screen);
+    active_screen = DefaultScreen(display);
+    active_root = RootWindow(display, active_screen);
+    default_screen = active_screen;
+    cursor_find(&child, &root_x, &root_y);
 }
