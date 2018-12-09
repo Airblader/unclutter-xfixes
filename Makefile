@@ -9,6 +9,7 @@ PREFIX = /usr
 
 BINDIR = $(PREFIX)/bin
 MANDIR = $(PREFIX)/share/man/man1
+LICENSEDIR = $(PREFIX)/share/licenses/$(TARGET)
 
 CC = gcc
 LD = $(CC)
@@ -45,11 +46,13 @@ $(ODIR)/%.o: $(SDIR)/%.c $(INCS)
 install: $(TARGET) mans
 	$(INSTALL) -Dm 0755 "$(TARGET)" "$(DESTDIR)$(BINDIR)/$(TARGET)"
 	$(INSTALL) -Dm 0644 man/unclutter-xfixes.1 "$(DESTDIR)$(MANDIR)/unclutter.1"
+	$(INSTALL) -Dm 0644 -t "$(DESTDIR)$(LICENSEDIR)/" LICENSE
 
 .PHONY: uninstall
 uninstall:
 	$(RM) "$(DESTDIR)$(BINDIR)/$(TARGET)"
 	$(RM) "$(DESTDIR)$(MANDIR)/unclutter.1"
+	$(RM) "$(DESTDIR)$(LICENSEDIR)/LICENSE"
 
 .PHONY: mans
 mans: $(MANS)
