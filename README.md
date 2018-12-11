@@ -10,9 +10,13 @@ This is a rewrite of the popular tool unclutter, but using the x11-xfixes extens
 
 ## Installation
 
-### Arch / Manjaro (AUR)
+### Arch / Manjaro
 
-unclutter-xfixes is available in the AUR as [unclutter-xfixes-git](https://aur.archlinux.org/packages/unclutter-xfixes-git/).
+```
+pacman -S unclutter
+```
+
+unclutter-xfixes is also available in the AUR as [unclutter-xfixes-git](https://aur.archlinux.org/packages/unclutter-xfixes-git/).
 
 ### Fedora
 
