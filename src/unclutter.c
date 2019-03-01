@@ -36,6 +36,7 @@ Config config = {
     .jitter = 0,
     .exclude_root = false,
     .ignore_scrolling = false,
+    .touch = false,
     .fork = false,
     .debug = false,
     .onescreen = false,
@@ -93,6 +94,7 @@ static void parse_args(int argc, char *argv[]) {
         { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
         { "ignore-scrolling", no_argument, 0, 0 },
+        { "touch", no_argument, 0, 0 },
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
@@ -129,6 +131,9 @@ static void parse_args(int argc, char *argv[]) {
                     break;
                 } else if (OPT_NAME_IS("exclude-root")) {
                     config.exclude_root = true;
+                    break;
+                } else if (OPT_NAME_IS("touch")) {
+                    config.touch = true;
                     break;
                 } else if (OPT_NAME_IS("root")) {
                     config.exclude_root = false;
@@ -185,7 +190,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--touch] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }

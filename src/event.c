@@ -82,8 +82,12 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
             last_cursor_pos.y = root_y;
         }
 
-        /* We don't bother checking the exact event since we only select events that interest us. */
-        cursor_show();
+        if (config.touch && (cookie->evtype == XI_RawTouchBegin || cookie->evtype == XI_RawTouchUpdate)) {
+            cursor_hide();
+        } else {
+            /* We don't bother checking the exact event since we only select events that interest us. */
+            cursor_show();
+        }
         ev_timer_again(loop, idle_watcher);
     }
 }
@@ -164,6 +168,10 @@ static void event_select_xi(void) {
     XISetMask(mask, XI_RawMotion);
     XISetMask(mask, XI_RawButtonPress);
     XISetMask(mask, XI_RawTouchUpdate);
+    if (config.touch) {
+        XISetMask(mask, XI_RawTouchBegin);
+        XISetMask(mask, XI_RawTouchUpdate);
+    }
 
     masks[0].deviceid = XIAllMasterDevices;
     masks[0].mask_len = sizeof(mask);

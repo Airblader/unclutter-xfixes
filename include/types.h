@@ -11,6 +11,7 @@ typedef struct Config {
     long jitter;
     bool exclude_root;
     bool ignore_scrolling;
+    bool touch;
     bool fork;
     bool debug;
     bool onescreen;
