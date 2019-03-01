@@ -8,7 +8,7 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [*--timeout* _seconds_] [*--jitter* _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--ignore-buttons* _buttons_] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*]
+unclutter [*--timeout* _seconds_] [*--jitter* _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--ignore-buttons* _buttons_] [*--hide-on-touch*] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*]
 
 Compatibility arguments:
 
@@ -35,6 +35,9 @@ the cursor. This is a shortcut for *--ignore-buttons* '4,5'.
 *--ignore-buttons*::
 Defines the mouse buttons which do not unhide the cursor when clicked. You can
 pass multiple button numbers by separating them with ','.
+
+*--hide-on-touch*::
+Hides the mouse cursor on touch events.
 
 *--fork*|*-b*::
 Fork unclutter to the background.

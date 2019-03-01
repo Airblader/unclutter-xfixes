@@ -17,6 +17,7 @@ typedef struct Config {
     bool exclude_root;
     bool ignore_scrolling;
     ignore_buttons_t ignore_buttons;
+    bool hide_on_touch;
     bool fork;
     bool debug;
     bool onescreen;
