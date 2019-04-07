@@ -46,6 +46,20 @@ static void x_cb(EV_P_ ev_io *w, int revents) {
     /* Deliberately empty. */
 }
 
+static bool is_button_ignored(const XIRawEvent *data) {
+    if (config.ignore_scrolling && (data->detail == 4 || data->detail == 5)) {
+        return true;
+    }
+
+    for (int i = 0; i < config.ignore_buttons.count; ++i) {
+        if (data->detail == config.ignore_buttons.buttons[i]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static void x_check_cb(EV_P_ ev_check *w, int revents) {
     XEvent ev;
     while (XPending(display) > 0) {
@@ -57,9 +71,9 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
             continue;
         }
 
-        if (config.ignore_scrolling && cookie->evtype == XI_RawButtonPress) {
+        if (cookie->evtype == XI_RawButtonPress) {
             const XIRawEvent *data = (const XIRawEvent *) cookie->data;
-            if (data->detail == 4 || data->detail == 5) {
+            if (is_button_ignored(data)) {
                 XFreeEventData(display, cookie);
                 continue;
             }

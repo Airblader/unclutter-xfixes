@@ -36,6 +36,8 @@ Config config = {
     .jitter = 0,
     .exclude_root = false,
     .ignore_scrolling = false,
+    .ignore_buttons.count = 0,
+    .ignore_buttons.buttons = NULL,
     .fork = false,
     .debug = false,
     .onescreen = false,
@@ -93,6 +95,7 @@ static void parse_args(int argc, char *argv[]) {
         { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
         { "ignore-scrolling", no_argument, 0, 0 },
+        { "ignore-buttons", required_argument, 0, 0 },
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
@@ -142,6 +145,9 @@ static void parse_args(int argc, char *argv[]) {
                 } else if (OPT_NAME_IS("ignore-scrolling")) {
                     config.ignore_scrolling = true;
                     break;
+                } else if (OPT_NAME_IS("ignore-buttons")) {
+                    parse_buttons_numbers(optarg, &config.ignore_buttons);
+                    break;
                 } else if (OPT_NAME_IS("debug")) {
                     config.debug = true;
                     break;
@@ -185,7 +191,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
