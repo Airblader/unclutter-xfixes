@@ -1,4 +1,4 @@
-// vim:ts=4:sw=4:expandtab -*- c-basic-offset:4 tab-width:4 -*-
+// vim:ts=4:sw=4:expandtab
 #pragma once
 
 #include <X11/Xlib.h>
