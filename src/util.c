@@ -21,16 +21,13 @@ long parse_int(char *str) {
 void parse_buttons_numbers(char *str, ignore_buttons_t *ignore_buttons) {
     char *button = strtok(str, ",");
     while (button != NULL) {
-        long number = atol(button);
+        long number = parse_int(button);
         button = strtok(NULL, ",");
-        if (number < 0 || number > UINT_MAX) {
+        if (number == -1) {
             continue;
         }
 
         ignore_buttons->count++;
-        if (ignore_buttons->count == UCHAR_MAX) {
-            bail("Too much buttons numbers");
-        }
         unsigned int *buttons = (unsigned int *)realloc(ignore_buttons->buttons,
             ignore_buttons->count * sizeof(unsigned int));
         if (buttons == NULL) {
@@ -39,10 +36,11 @@ void parse_buttons_numbers(char *str, ignore_buttons_t *ignore_buttons) {
         } else {
             ignore_buttons->buttons = buttons;
         }
+
         ignore_buttons->buttons[ignore_buttons->count - 1] = number;
     }
 
-    if (!ignore_buttons->count) {
-        bail("Amount of buttons to ignore = 0");
+    if (ignore_buttons->count == 0) {
+        bail("--ignore-buttons was specified, but no button could be parsed.");
     }
 }
