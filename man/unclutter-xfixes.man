@@ -21,7 +21,7 @@ Specifies the number of seconds after which the cursor should be hidden if
 it was neither moved nor any button was pressed. (Default: 5)
 
 *--jitter* _radius_::
-Ignore cursor movements if the cursor hasn't moved sufficiently far.
+Ignore cursor movements if the cursor hasn't moved at least _radius_ pixels.
 
 *--exclude-root*::
 Don't hide the mouse cursor if it is idling over the root window and not an
