@@ -18,6 +18,18 @@ long parse_int(char *str) {
     return parsed;
 }
 
+double parse_double(char *str) {
+    char *endptr = NULL;
+    double parsed = strtod(str, &endptr);
+    if (parsed == -DBL_MAX || parsed == DBL_MAX ||
+            parsed < 0 || endptr == str) {
+
+        return -1;
+    }
+
+    return parsed;
+}
+
 void parse_buttons_numbers(char *str, ignore_buttons_t *ignore_buttons) {
     char *button = strtok(str, ",");
     while (button != NULL) {

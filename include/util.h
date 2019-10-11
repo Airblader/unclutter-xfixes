@@ -28,4 +28,6 @@ void bail(char *message);
 
 long int parse_int(char *str);
 
+double parse_double(char *str);
+
 void parse_buttons_numbers(char *str, ignore_buttons_t *ignore_buttons);

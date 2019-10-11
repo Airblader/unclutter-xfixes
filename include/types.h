@@ -12,7 +12,7 @@ typedef struct ignore_buttons_t {
 } ignore_buttons_t;
 
 typedef struct Config {
-    long timeout;
+    double timeout;
     long jitter;
     bool exclude_root;
     bool ignore_scrolling;
