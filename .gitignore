@@ -3,3 +3,20 @@ obj/*.o
 man/*.1
 man/*.xml
 test/GLOB*
+*.o
+
+# autotools stuff
+.deps/
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+autostuff/
+config.h
+config.h.in
+config.h.in~
+config.log
+config.status
+configure
+m4/
+stamp-h1
