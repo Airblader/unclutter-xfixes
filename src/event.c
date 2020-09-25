@@ -47,7 +47,7 @@ static void x_cb(EV_P_ ev_io *w, int revents) {
 }
 
 static bool is_button_ignored(const XIRawEvent *data) {
-    if (config.ignore_scrolling && (data->detail == 4 || data->detail == 5)) {
+    if (config.ignore_scrolling && (data->detail == 4 || data->detail == 5 || data->detail == 6)) {
         return true;
     }
 
