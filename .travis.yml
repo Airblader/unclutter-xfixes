@@ -7,6 +7,6 @@ branches:
 install:
     - sudo apt-get update
     - sudo apt-get install asciidoc
-    - sudo apt-get install libx11-dev libxi-dev libxfixes-dev libev-dev
+    - sudo apt-get install libx11-dev libxi-dev libxfixes-dev libev-dev xsltproc
 script:
     - make -j8 all
