@@ -23,6 +23,7 @@ typedef struct Config {
     bool onescreen;
     bool ignore_matches;
     match_t *matches;
+    bool start_hidden;
 } Config;
 
 typedef struct coordinates_t {

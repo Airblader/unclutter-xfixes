@@ -43,7 +43,8 @@ Config config = {
     .debug = false,
     .onescreen = false,
     .ignore_matches = false,
-    .matches = NULL
+    .matches = NULL,
+    .start_hidden = false
 };
 
 int main(int argc, char *argv[]) {
@@ -64,6 +65,8 @@ static void run(void) {
 
     display_init();
     extensions_init();
+    if (config.start_hidden)
+        cursor_hide();
     event_init();
 
     exit(EXIT_SUCCESS);
@@ -102,6 +105,7 @@ static void parse_args(int argc, char *argv[]) {
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
         { "debug", no_argument, 0, 0 },
+        { "start-hidden", no_argument, 0, 0},
         { 0, 0, 0, 0 }
     };
 
@@ -160,6 +164,9 @@ static void parse_args(int argc, char *argv[]) {
                 } else if (OPT_NAME_IS("keystroke") || OPT_NAME_IS("grab") || OPT_NAME_IS("noevents") || OPT_NAME_IS("reset")) {
                     ELOG("Using unsupported unclutter argument \"%s\", ignoring.", opt_name);
                     break;
+                } else if (OPT_NAME_IS("start-hidden")) {
+                    config.start_hidden = true;
+                    break;
                 }
 
                 print_usage(argv);
@@ -197,7 +204,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start_hidden]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
