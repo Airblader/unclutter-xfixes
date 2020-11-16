@@ -38,7 +38,9 @@ rather just the desktop background.
 
 *--ignore-scrolling*::
 Ignore mouse scroll events (buttons 4 and 5) so that scrolling doesn't unhide
-the cursor. This is a shortcut for *--ignore-buttons* '4,5'.
+the cursor. This is a shortcut for *--ignore-buttons* '4,5'. If you want to
+ignore horizontal scrolling as well, use *--ignore-buttons* instead by
+specifying all buttons manually (e.g. '4,5,6,7').
 
 *--ignore-buttons*::
 Defines the mouse buttons which do not unhide the cursor when clicked. You can
@@ -58,6 +60,15 @@ Display the usage and exit.
 
 *--version*|*-v*::
 Display the version and exit.
+
+== TROUBLESHOOTING
+
+=== *--ignore-scrolling* doesn't work
+
+This can happen, especially on trackpoints, if other button events, e.g. for
+horizontal scrolling, are sent as well. You can try adding some jitter, or
+verify by using *xev -event button*. If you want to ignore horizontal scrolling
+as well, use *--ignore-buttons* instead of *--ignore-scrolling*.
 
 == COMPATIBILITY
 
