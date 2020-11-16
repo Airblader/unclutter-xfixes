@@ -14,6 +14,14 @@ Compatibility arguments:
 
 unclutter [*--display*|*-d* _display_] [*--idle* _seconds_] [*--keystroke*] [*--grab*] [*--noevents*] [*--reset*] [*--root*] [*--onescreen*] [*--not*] _name …_
 
+== DESCRIPTION
+
+Hide the mouse cursor if it isn't being used.
+
+This version of unclutter is a rewrite of the original and uses the x11-xfixes
+extension, which means that no fake windows or pointer grabbing is needed. This
+should work better with window managers and applications.
+
 == OPTIONS
 
 *--timeout* _seconds_::
@@ -89,11 +97,3 @@ into a list that specifies windows where the cursor shall not be removed. These 
 where an element of the list matches, in a case insensitive comparison, the starting characters of
 either the WM_NAME, or the name or class of the WM_CLASS, properties of the window. (Note that this
 argument can be given anywhere on the command line.)
-
-== DESCRIPTION
-
-Hide the mouse cursor if it isn't being used.
-
-This version of unclutter is a rewrite of the original and uses the x11-xfixes
-extension, which means that no fake windows or pointer grabbing is needed. This
-should work better with window managers and applications.
