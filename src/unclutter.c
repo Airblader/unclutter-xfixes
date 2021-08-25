@@ -204,7 +204,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start_hidden]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start-hidden]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
