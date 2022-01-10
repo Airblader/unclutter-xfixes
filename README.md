@@ -28,7 +28,14 @@ unclutter-xfixes is available in the FreeBSD Ports Collection as [misc/unclutter
 
 ### Manual
 
-unclutter-xfixes is make-based. Hence, you can clone the git repository and compile and install it via
+Make sure to install the missing dependencies first:
+
+* libev-devel
+* libX11-devel
+* libXi-devel
+* asciidoc 
+
+You can then clone the git repository, compile and install it using like this:
 
 ```
 git clone https://github.com/Airblader/unclutter-xfixes
