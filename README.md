@@ -18,6 +18,12 @@ pacman -S unclutter
 
 unclutter-xfixes is also available in the AUR as [unclutter-xfixes-git](https://aur.archlinux.org/packages/unclutter-xfixes-git/).
 
+### Debian / Ubuntu
+
+```
+apt install unclutter-xfixes
+```
+
 ### Fedora
 
 unclutter-xfixes is available [via a copr repository](https://copr.fedorainfracloud.org/coprs/nbeernink/unclutter-xfixes/).
