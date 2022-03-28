@@ -26,7 +26,9 @@ apt install unclutter-xfixes
 
 ### Fedora
 
-unclutter-xfixes is available [via a copr repository](https://copr.fedorainfracloud.org/coprs/nbeernink/unclutter-xfixes/).
+```
+dnf install unclutter-xfixes
+```
 
 ### FreeBSD
 
