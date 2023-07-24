@@ -96,6 +96,7 @@ static void parse_args(int argc, char *argv[]) {
 
         /* unclutter-xfixes options */
         { "timeout", required_argument, 0, 0 },
+        { "no-timeout", no_argument, 0, 0 },
         { "jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
         { "ignore-scrolling", no_argument, 0, 0 },
@@ -128,6 +129,9 @@ static void parse_args(int argc, char *argv[]) {
                     else
                         config.timeout = value_double;
 
+                    break;
+                } else if (OPT_NAME_IS("no-timeout")) {
+                    config.timeout = -1.0;
                     break;
                 } else if (OPT_NAME_IS("jitter")) {
                     value = parse_int(optarg);
@@ -204,7 +208,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start-hidden]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--no-timeout] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start-hidden]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }

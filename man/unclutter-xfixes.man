@@ -8,7 +8,7 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [*--timeout* _seconds_] [*--jitter* _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--ignore-buttons* _buttons_] [*--hide-on-touch*] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*] [*--start-hidden*]
+unclutter [*--timeout* _seconds_] [*--no-timeout*] [*--jitter* _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--ignore-buttons* _buttons_] [*--hide-on-touch*] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*] [*--start-hidden*]
 
 Compatibility arguments:
 
@@ -27,6 +27,10 @@ should work better with window managers and applications.
 *--timeout* _seconds_::
 Specifies the number of seconds after which the cursor should be hidden if
 it was neither moved nor any button was pressed. (Default: 5)
+
+*--no-timeout*::
+Disables the timeout mechanism entirely. Useful when used in combination with
+*--hide-on-touch*.
 
 *--jitter* _radius_::
 Ignore cursor movements if the cursor hasn't moved at least _radius_ pixels.

@@ -2,7 +2,7 @@
 #include "all.h"
 
 static struct ev_loop *loop;
-static struct ev_timer *idle_watcher;
+static struct ev_timer *idle_watcher = NULL;
 static struct ev_io *x_watcher;
 static struct ev_check *x_check;
 
@@ -22,7 +22,11 @@ void event_init(void) {
 
     loop = EV_DEFAULT;
     event_init_x_loop();
-    event_init_timer();
+    
+    if (config.timeout >= 0.0) {
+        event_init_timer();
+    }
+
     ev_run(loop, 0);
 }
 
@@ -102,7 +106,10 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
             /* We don't bother checking the exact event since we only select events that interest us. */
             cursor_show();
         }
-        ev_timer_again(loop, idle_watcher);
+
+        if (idle_watcher) {
+            ev_timer_again(loop, idle_watcher);
+        }
     }
 }
 
