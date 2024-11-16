@@ -39,6 +39,7 @@ Config config = {
     .ignore_buttons.count = 0,
     .ignore_buttons.buttons = NULL,
     .hide_on_touch = false,
+    .hide_on_kbd = false,
     .fork = false,
     .debug = false,
     .onescreen = false,
