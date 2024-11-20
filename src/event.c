@@ -100,10 +100,11 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
             last_cursor_pos.y = root_y;
         }
 
-        if (
-               (config.hide_on_touch && (cookie->evtype == XI_RawTouchBegin || cookie->evtype == XI_RawTouchUpdate))
-            || (config.hide_on_kbd && (cookie->evtype == XI_RawKeyPress))
-        ) {
+        bool should_hide = false;
+        should_hide |= config.hide_on_touch && (cookie->evtype == XI_RawTouchBegin || cookie->evtype == XI_RawTouchUpdate);
+        should_hide |= config.hide_on_kbd && cookie->evtype == XI_RawKeyPress;
+
+        if (should_hide) {
             cursor_hide();
         } else {
             /* We don't bother checking the exact event since we only select events that interest us. */
