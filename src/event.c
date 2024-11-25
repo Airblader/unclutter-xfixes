@@ -100,7 +100,11 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
             last_cursor_pos.y = root_y;
         }
 
-        if (config.hide_on_touch && (cookie->evtype == XI_RawTouchBegin || cookie->evtype == XI_RawTouchUpdate)) {
+        bool should_hide = false;
+        should_hide |= config.hide_on_touch && (cookie->evtype == XI_RawTouchBegin || cookie->evtype == XI_RawTouchUpdate);
+        should_hide |= config.hide_on_kbd && cookie->evtype == XI_RawKeyPress;
+
+        if (should_hide) {
             cursor_hide();
         } else {
             /* We don't bother checking the exact event since we only select events that interest us. */
@@ -192,6 +196,9 @@ static void event_select_xi(void) {
     if (config.hide_on_touch) {
         XISetMask(mask, XI_RawTouchBegin);
         XISetMask(mask, XI_RawTouchUpdate);
+    }
+    if (config.hide_on_kbd) {
+        XISetMask(mask, XI_RawKeyPress);
     }
 
     masks[0].deviceid = XIAllMasterDevices;

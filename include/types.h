@@ -24,6 +24,7 @@ typedef struct Config {
     bool ignore_matches;
     match_t *matches;
     bool start_hidden;
+    bool hide_on_kbd;
 } Config;
 
 typedef struct coordinates_t {

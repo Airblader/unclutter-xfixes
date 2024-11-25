@@ -39,6 +39,7 @@ Config config = {
     .ignore_buttons.count = 0,
     .ignore_buttons.buttons = NULL,
     .hide_on_touch = false,
+    .hide_on_kbd = false,
     .fork = false,
     .debug = false,
     .onescreen = false,
@@ -102,6 +103,7 @@ static void parse_args(int argc, char *argv[]) {
         { "ignore-scrolling", no_argument, 0, 0 },
         { "ignore-buttons", required_argument, 0, 0 },
         { "hide-on-touch", no_argument, 0, 0 },
+        { "hide-on-key-press", no_argument, 0, 0},
         { "fork", no_argument, 0, 'b' },
         { "version", no_argument, 0, 'v' },
         { "help", no_argument, 0, 'h' },
@@ -146,6 +148,9 @@ static void parse_args(int argc, char *argv[]) {
                     break;
                 } else if (OPT_NAME_IS("hide-on-touch")) {
                     config.hide_on_touch = true;
+                    break;
+                } else if (OPT_NAME_IS("hide-on-key-press")) {
+                    config.hide_on_kbd = true;
                     break;
                 } else if (OPT_NAME_IS("root")) {
                     config.exclude_root = false;
@@ -208,7 +213,7 @@ static void parse_args(int argc, char *argv[]) {
 }
 
 static void print_usage(char *argv[]) {
-    fprintf(stderr, "Usage: %s [--timeout <n>] [--no-timeout] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start-hidden]", argv[0]);
+    fprintf(stderr, "Usage: %s [--timeout <n>] [--no-timeout] [--jitter <radius>] [--exclude-root] [--ignore-scrolling] [--ignore-buttons <buttons>] [--hide-on-touch] [-b|--fork] [-v|--version] [-h|--help] [--start-hidden] [--hide-on-key-press]", argv[0]);
     fprintf(stderr, "\n");
     exit(EXIT_FAILURE);
 }
