@@ -12,6 +12,7 @@ static Window last_avoided = None;
 /* Forward declarations */
 static void event_init_x_loop(void);
 static void event_init_timer(void);
+static void event_init_cursor_pos(void);
 static void x_cb(EV_P_ ev_io *w, int revents);
 static void x_check_cb(EV_P_ ev_check *w, int revents);
 static void idle_cb(EV_P_ ev_timer *w, int revents);
@@ -19,10 +20,11 @@ static void event_select_xi(void);
 
 void event_init(void) {
     event_select_xi();
+    event_init_cursor_pos();
 
     loop = EV_DEFAULT;
     event_init_x_loop();
-    
+
     if (config.timeout >= 0.0) {
         event_init_timer();
     }
@@ -44,6 +46,16 @@ static void event_init_timer(void) {
     idle_watcher = calloc(sizeof(struct ev_timer), 1);
     ev_timer_init(idle_watcher, idle_cb, config.timeout, config.timeout);
     ev_timer_start(loop, idle_watcher);
+}
+
+static void event_init_cursor_pos(void) {
+    Window child;
+    int root_x, root_y;
+
+    cursor_find(&child, &root_x, &root_y);
+
+    last_cursor_pos.x = root_x;
+    last_cursor_pos.y = root_y;
 }
 
 static void x_cb(EV_P_ ev_io *w, int revents) {
